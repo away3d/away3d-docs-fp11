@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Away3D 4.0 SWC and ASDoc Builder" basedir="."> 
+ 
+    <!-- #################################################################################### 
+    	Adjust the following properties to suit your installation. Pay special
+    	attention to the FLEX_HOME and also the TARGET_FLASH_PLAYER_VERSION which
+    	should match the location of the 'playerglobal.swc' file in :-
+    	
+    	<FLEX_HOME>/frameworks/libs/player/<TARGET_FLASH_PLAYER_VERSION>/playerglobal.swc
+    	
+     #################################################################################### -->
+    
+    <property name="FLEX_HOME" value="/Applications/FlexSDK Libraries/4.6.0-Air3.3-FP11.3" /> 
+
+    <property name="AWAY3D_SOURCES" value="${basedir}/away3d-core-fp11/src" /> 
+    <property name="TARGET_FLASH_PLAYER_VERSION" value="11.0" /> 
+    
+    <property name="SWC_OUTPUT" value="${basedir}/swcs/Away3D.swc" /> 
+
+    <property name="ASDOC_TITLE" value="Away3D Documentation" /> 
+    <property name="ASDOC_EXAMPLES_DIR" value="${basedir}/examples" /> 
+    <property name="ASDOC_OUTPUT_DIR" value="${basedir}/livedocs" /> 
+
+    <!-- #################################################################################### 
+    	No need to make any changes below this line.
+     #################################################################################### -->
+    
+    <taskdef resource="flexTasks.tasks" classpath="${FLEX_HOME}/ant/lib/flexTasks.jar" /> 
+
+    <target name="generate_SWC_library" description="Generate a SWC library of Away3D"> 
+        <compc output="${SWC_OUTPUT}"
+            target-player="${TARGET_FLASH_PLAYER_VERSION}">
+            
+            <source-path path-element="${AWAY3D_SOURCES}" /> 
+            <include-sources dir="${AWAY3D_SOURCES}/" includes="*" /> 
+        
+        </compc> 
+    </target> 
+
+    <target name="generate_documentation" depends="clean" description="Generate the documentation files for Away3D"> 
+        <asdoc output="${ASDOC_OUTPUT_DIR}"
+            main-title="${ASDOC_TITLE}" 
+            window-title="${ASDOC_TITLE}"
+            target-player="${TARGET_FLASH_PLAYER_VERSION}"
+            examples-path="${ASDOC_EXAMPLES_DIR}"
+            lenient="true"
+            failonerror="true"> 
+            
+            <exclude-sources path-element="${AWAY3D_SOURCES}/com/adobe/utils/AGALMiniAssembler.as" />
+            <source-path path-element="${AWAY3D_SOURCES}" />
+            <doc-sources path-element="${AWAY3D_SOURCES}/away3d" />              
+            
+        </asdoc> 
+    </target> 
+    
+    <target name="clean" description="Remove previously create Away3D documentation files"> 
+        <delete includeEmptyDirs="true"> 
+            <fileset dir="${ASDOC_OUTPUT_DIR}" includes="**/*" /> 
+        </delete> 
+    </target> 
+</project>
